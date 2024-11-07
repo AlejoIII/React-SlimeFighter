@@ -1,14 +1,21 @@
 import React from 'react';
-import { IonButton } from "@ionic/react";
 import './App.css';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Home from "./pages/Home";
+import Game from "./pages/Game";
 
-function App() {
-  return (
-    <>
-      <img src="/images/Slime Rancher/Ventana_inicio.png" alt="Logo" />
-      <IonButton expand="full" className='button' href='./Game.jsx'>Play</IonButton>
-    </>
-  )
+function App () {
+  return(
+    <div>
+      <Router>
+        <Routes>
+          <Route path='/' element={<Home />}/>
+          <Route path='/game' element={<Game />}/>
+          <Route/>
+        </Routes>
+      </Router>
+    </div>
+  );
 }
 
 export default App
