@@ -1,30 +1,17 @@
 import React from "react";
-import { BottomComponent } from "../Components/BottomComponent.jsx";
+import '../css/Game.css';
 
-
-
-export const BodyComponent = () => {
+export const BodyComponent = ({ slimeJugador1, slimeJugador2 }) => {
     return (
         <div className="body">
-            <ul className="VidasPlayer1">
-               <li></li>
-               <li></li>
-               <li></li> 
-            </ul>
-            <ul className="VidasPlayer2">
-                <li></li>
-                <li></li>
-                <li></li>
-            </ul>
-            <ul className="SlimesEscogidos">
-                <li></li>
-                <li></li>
-            </ul>
+            <div className="SlimesEscogidos">
+                <img src={slimeJugador1.image} alt="Slime Jugador 1" />
+                <img src={slimeJugador2.image} alt="Slime Jugador 2" />
+            </div>
             <ul className="AtributosPlayers">
-                <li></li>
-                <li></li>
-                <li></li>
+                <li>Ataque: {slimeJugador1.Ataque}, Defensa: {slimeJugador1.Defensa}, Velocidad: {slimeJugador1.Velocidad}</li>
+                <li>Ataque: {slimeJugador2.Ataque}, Defensa: {slimeJugador2.Defensa}, Velocidad: {slimeJugador2.Velocidad}</li>
             </ul>
         </div>
     );
-}
+};

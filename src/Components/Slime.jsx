@@ -5,6 +5,7 @@ class Slime {
         this.Defensa = Defensa;
         this.Velocidad = Velocidad;
     }
+
 }
 
 export default Slime;

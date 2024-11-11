@@ -9,7 +9,7 @@ function Home() {
     }
 
   return (
-    <div className='Game'>
+    <div className='Home'>
         <img src="/images/Slime Rancher/Ventana_inicio.png" alt="Logo" />
         <button onClick={() => {setGoToGame(true);}}>Play</button>
     </div>
