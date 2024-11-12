@@ -13,10 +13,7 @@ function Game() {
   
   const [slimeJugador1, setSlimeJugador1] = useState(slimes[Math.floor(Math.random() * slimes.length)]);
   const [slimeJugador2, setSlimeJugador2] = useState(slimes[Math.floor(Math.random() * slimes.length)]);
-  
 
- 
-  
   return (
     <div className="Game">
       <TopComponent
