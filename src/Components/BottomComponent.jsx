@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Slime from "../Components/Slime.jsx";
-
+// Constantes para los atributos de los slimes
 const Atributos = {
   ATAQUE: "ataque",
   DEFENSA: "defensa",
   VELOCIDAD: "velocidad",
 };
-
+// Slimes disponibles
 const slimes = [
-  new Slime("/images/Slime Rancher/Slimes/Gato_monedas.png", 50, 30, 70),
+  new Slime("/images/Slime Rancher/Slimes/Slime_agua.png", 30, 20, 90),
   new Slime("/images/Slime Rancher/Slimes/Siime_Lava.png", 70, 50, 40),
   new Slime("/images/Slime Rancher/Slimes/Slime_agua.png", 30, 20, 90),
   new Slime("/images/Slime Rancher/Slimes/Slime_dorado.png", 90, 70, 60),
@@ -25,7 +25,7 @@ const slimes = [
   new Slime("/images/Slime Rancher/Slimes/Slime_Toxico.png", 60, 50, 60),
   new Slime("/images/Slime Rancher/Slimes/Slime_Zorro.png", 70, 40, 90),
 ];
-
+// Componente que se encarga de mostrar los botones de luchar, reiniciar y salir
 export const BottomComponent = ({
   setVidasJugador1,
   setVidasJugador2,
@@ -34,24 +34,29 @@ export const BottomComponent = ({
   setSlimeJugador1,
   setSlimeJugador2,
 }) => {
+  // Hook para navegar entre las páginas
   const navigate = useNavigate();
+  // Hook para manejar el estado de los slimes
   const [slimeJugador1, setSlimeJugador1State] = useState({});
   const [slimeJugador2, setSlimeJugador2State] = useState({});
+  // Hook para manejar el estado del juego
   const [juegoTerminado, setJuegoTerminado] = useState(false);
+  // Hook para manejar el mensaje de resultado
   const [mensajeResultado, setMensajeResultado] = useState("");
-
+  // Hook para manejar el atributo seleccionado
   useEffect(() => {
     seleccionarSlimesAleatorios();
   }, []);
-
+  // Funcion para realizar la pelea
   const pelea = () => {
+    // Seleccionar un atributo aleatorio
     const atributos = [Atributos.ATAQUE, Atributos.DEFENSA, Atributos.VELOCIDAD];
     const atributoAleatorio = atributos[Math.floor(Math.random() * atributos.length)];
     setAtributoSeleccionado(atributoAleatorio);
-
+    // Comparar los atributos de los slimes
     const valorJugador1 = slimeJugador1[atributoAleatorio];
     const valorJugador2 = slimeJugador2[atributoAleatorio];
-
+    // Actualizar el resultado
     if (valorJugador1 > valorJugador2) {
       actualizarVidas(true);
       if (!juegoTerminado) setMensajeResultado("¡Jugador 1 gana!");
@@ -62,7 +67,7 @@ export const BottomComponent = ({
       if (!juegoTerminado) setMensajeResultado("¡Empate!");
     }
   };
-
+  // Funcion para actualizar las vidas de los jugadores
   const actualizarVidas = (FirstWinPlayer) => {
     if (FirstWinPlayer) {
       setVidasJugador2((prevVidas) => {
@@ -92,7 +97,7 @@ export const BottomComponent = ({
       });
     }
   };
-
+  // Funcion para reiniciar el juego
   const reiniciarJuego = () => {
     setVidasJugador1([true, true, true]);
     setVidasJugador2([true, true, true]);
@@ -101,18 +106,20 @@ export const BottomComponent = ({
     setJuegoTerminado(false);
     seleccionarSlimesAleatorios();
   };
-
+  // Funcion para seleccionar los slimes aleatorios
   const seleccionarSlimesAleatorios = () => {
+    // Seleccionar dos slimes aleatorios
     const randomSlime1 = Math.floor(Math.random() * slimes.length);
+    // Seleccionar otro slime aleatorio diferente al anterior
     let randomSlime2;
     do {
       randomSlime2 = Math.floor(Math.random() * slimes.length);
     } while (randomSlime1 === randomSlime2);
-
+    // Actualizar los slimes de los jugadores
     setSlimeJugador1State(slimes[randomSlime1]);
     setSlimeJugador2State(slimes[randomSlime2]);
   };
-
+  // Actualizar los slimes de los jugadores
   return (
     <div className="bottom">
       <button onClick={pelea} disabled={juegoTerminado}>Luchar</button>

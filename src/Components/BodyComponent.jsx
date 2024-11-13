@@ -1,6 +1,6 @@
 import React from "react";
 import '../css/Game.css';
-
+// Componente que se encarga de mostrar los slimes seleccionados y sus atributos
 export const BodyComponent = ({ slimeJugador1, slimeJugador2 }) => {
     return (
       <div className="body">

@@ -1,5 +1,5 @@
 import React from 'react';
-
+// Componente que se encarga de mostrar las vidas de los jugadores, el atributo seleccionado y el resultado de la pelea
 function TopComponent({ vidasJugador1, vidasJugador2, atributoSeleccionado, resultado }) {
   return (
     <div className="top-component">
