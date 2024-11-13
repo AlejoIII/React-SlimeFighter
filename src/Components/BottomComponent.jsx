@@ -59,12 +59,12 @@ export const BottomComponent = ({
     // Actualizar el resultado
     if (valorJugador1 > valorJugador2) {
       actualizarVidas(true);
-      if (!juegoTerminado) setMensajeResultado("¡Jugador 1 gana!");
+      if (!juegoTerminado) setMensajeResultado("Jugador 1 gana");
     } else if (valorJugador1 < valorJugador2) {
       actualizarVidas(false);
-      if (!juegoTerminado) setMensajeResultado("¡Jugador 2 gana!");
+      if (!juegoTerminado) setMensajeResultado("Jugador 2 gana");
     } else {
-      if (!juegoTerminado) setMensajeResultado("¡Empate!");
+      if (!juegoTerminado) setMensajeResultado("Empate");
     }
   };
   // Funcion para actualizar las vidas de los jugadores
