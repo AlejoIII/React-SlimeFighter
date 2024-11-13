@@ -37,30 +37,29 @@ export const BottomComponent = ({
   const navigate = useNavigate();
   const [slimeJugador1, setSlimeJugador1State] = useState({});
   const [slimeJugador2, setSlimeJugador2State] = useState({});
-
+  const [juegoTerminado, setJuegoTerminado] = useState(false);
+  const [mensajeResultado, setMensajeResultado] = useState("");
 
   useEffect(() => {
     seleccionarSlimesAleatorios();
   }, []);
 
   const pelea = () => {
-    // Seleccionar un atributo aleatorio
     const atributos = [Atributos.ATAQUE, Atributos.DEFENSA, Atributos.VELOCIDAD];
-    // Seleccionar un atributo aleatorio
     const atributoAleatorio = atributos[Math.floor(Math.random() * atributos.length)];
     setAtributoSeleccionado(atributoAleatorio);
-    // Comparar los atributos de los slimes
+
     const valorJugador1 = slimeJugador1[atributoAleatorio];
     const valorJugador2 = slimeJugador2[atributoAleatorio];
-    // Actualizar el estado del resultado
+
     if (valorJugador1 > valorJugador2) {
       actualizarVidas(true);
-      setResultadoState("¡Jugador 1 gana!");
+      if (!juegoTerminado) setMensajeResultado("¡Jugador 1 gana!");
     } else if (valorJugador1 < valorJugador2) {
       actualizarVidas(false);
-      setResultadoState("¡Jugador 2 gana!");
+      if (!juegoTerminado) setMensajeResultado("¡Jugador 2 gana!");
     } else {
-      setResultadoState("¡Empate!");
+      if (!juegoTerminado) setMensajeResultado("¡Empate!");
     }
   };
 
@@ -70,9 +69,12 @@ export const BottomComponent = ({
         const nuevasVidas = [...prevVidas];
         const index = nuevasVidas.findIndex((vida) => vida === true); 
         if (index !== -1) {
-          nuevasVidas[index] = false; 
+          nuevasVidas[index] = false;
         }
-        console.log("Vidas Jugador 2 actualizadas:", nuevasVidas);
+        if (!nuevasVidas.includes(true)) {
+          setJuegoTerminado(true);
+          setMensajeResultado("¡Jugador 1 gana!");
+        }
         return nuevasVidas;
       });
     } else {
@@ -80,9 +82,12 @@ export const BottomComponent = ({
         const nuevasVidas = [...prevVidas];
         const index = nuevasVidas.findIndex((vida) => vida === true); 
         if (index !== -1) {
-          nuevasVidas[index] = false; 
+          nuevasVidas[index] = false;
         }
-        console.log("Vidas Jugador 1 actualizadas:", nuevasVidas);
+        if (!nuevasVidas.includes(true)) {
+          setJuegoTerminado(true);
+          setMensajeResultado("¡Jugador 2 gana!");
+        }
         return nuevasVidas;
       });
     }
@@ -91,8 +96,9 @@ export const BottomComponent = ({
   const reiniciarJuego = () => {
     setVidasJugador1([true, true, true]);
     setVidasJugador2([true, true, true]);
-    setResultado("");
+    setMensajeResultado("");
     setAtributoSeleccionado("");
+    setJuegoTerminado(false);
     seleccionarSlimesAleatorios();
   };
 
@@ -109,24 +115,10 @@ export const BottomComponent = ({
 
   return (
     <div className="bottom">
-      <button onClick={pelea}>Luchar</button>
-      <button onClick={reiniciarJuego}>Reiniciar</button>
+      <button onClick={pelea} disabled={juegoTerminado}>Luchar</button>
+      <button onClick={reiniciarJuego} disabled={!juegoTerminado}>Reiniciar</button>
       <button onClick={() => navigate("/")}>Salir</button>
-    </div>
-  );
-};
-
-export const BodyComponent = ({ slimeJugador1, slimeJugador2 }) => {
-  return (
-    <div className="body">
-      <div className="SlimesEscogidos">
-        <img src={slimeJugador1.image} alt="Slime Jugador 1" />
-        <img src={slimeJugador2.image} alt="Slime Jugador 2" />
-      </div>
-      <ul className="AtributosPlayers">
-        <li>Ataque: {slimeJugador1.Ataque}, Defensa: {slimeJugador1.Defensa}, Velocidad: {slimeJugador1.Velocidad}</li>
-        <li>Ataque: {slimeJugador2.Ataque}, Defensa: {slimeJugador2.Defensa}, Velocidad: {slimeJugador2.Velocidad}</li>
-      </ul>
+      {mensajeResultado && <p>{mensajeResultado}</p>}
     </div>
   );
 };
