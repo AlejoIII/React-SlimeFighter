@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Slime from "../Components/Slime.jsx";
-import { IonGrid, IonRow, IonCol, IonImg, IonList, IonItem } from '@ionic/react';
-import { IonButton } from '@ionic/react';
-import { useHistory } from 'react-router-dom';
 
 const Atributos = {
   ATAQUE: "ataque",
   DEFENSA: "defensa",
   VELOCIDAD: "velocidad",
 };
-
+// Slimes disponibles
 const slimes = [
-  new Slime("/images/Slime Rancher/Slimes/Gato_monedas.png", 50, 30, 70),
+  new Slime("/images/Slime Rancher/Slimes/Slime_agua.png", 30, 20, 90),
   new Slime("/images/Slime Rancher/Slimes/Siime_Lava.png", 70, 50, 40),
   new Slime("/images/Slime Rancher/Slimes/Slime_agua.png", 30, 20, 90),
   new Slime("/images/Slime Rancher/Slimes/Slime_dorado.png", 90, 70, 60),
@@ -28,7 +25,7 @@ const slimes = [
   new Slime("/images/Slime Rancher/Slimes/Slime_Toxico.png", 60, 50, 60),
   new Slime("/images/Slime Rancher/Slimes/Slime_Zorro.png", 70, 40, 90),
 ];
-
+// Componente que se encarga de mostrar los botones de luchar, reiniciar y salir
 export const BottomComponent = ({
   setVidasJugador1,
   setVidasJugador2,
@@ -37,16 +34,17 @@ export const BottomComponent = ({
   setSlimeJugador1,
   setSlimeJugador2,
 }) => {
+  // Hook para navegar entre las páginas
   const navigate = useNavigate();
+  // Hook para manejar el estado de los slimes
   const [slimeJugador1, setSlimeJugador1State] = useState({});
   const [slimeJugador2, setSlimeJugador2State] = useState({});
-  const history = useHistory();
 
 
   useEffect(() => {
     seleccionarSlimesAleatorios();
   }, []);
-
+  // Funcion para realizar la pelea
   const pelea = () => {
     // Seleccionamos un atributo aleatorio de los 3 disponibles
     const atributos = [Atributos.ATAQUE, Atributos.DEFENSA, Atributos.VELOCIDAD];
@@ -56,19 +54,17 @@ export const BottomComponent = ({
     // Comparamos los atributos de los slimes
     const valorJugador1 = slimeJugador1[atributoAleatorio];
     const valorJugador2 = slimeJugador2[atributoAleatorio];
-    
-    // Actualizamos el estado del resultado
+    // Actualizar el estado del resultado
     if (valorJugador1 > valorJugador2) {
       actualizarVidas(true);
-      setResultado("¡Jugador 1 gana!"); 
+      setResultadoState("¡Jugador 1 gana!");
     } else if (valorJugador1 < valorJugador2) {
       actualizarVidas(false);
-      setResultado("¡Jugador 2 gana!"); 
+      setResultadoState("¡Jugador 2 gana!");
     } else {
-      setResultado("¡Empate!"); 
+      setResultadoState("¡Empate!");
     }
   };
-  
 
   const actualizarVidas = (FirstWinPlayer) => {
     if (FirstWinPlayer) {
@@ -76,9 +72,12 @@ export const BottomComponent = ({
         const nuevasVidas = [...prevVidas];
         const index = nuevasVidas.findIndex((vida) => vida === true); 
         if (index !== -1) {
-          nuevasVidas[index] = false; 
+          nuevasVidas[index] = false;
         }
-        console.log("Vidas Jugador 2 actualizadas:", nuevasVidas);
+        if (!nuevasVidas.includes(true)) {
+          setJuegoTerminado(true);
+          setMensajeResultado("¡Jugador 1 gana!");
+        }
         return nuevasVidas;
       });
     } else {
@@ -86,75 +85,59 @@ export const BottomComponent = ({
         const nuevasVidas = [...prevVidas];
         const index = nuevasVidas.findIndex((vida) => vida === true); 
         if (index !== -1) {
-          nuevasVidas[index] = false; 
+          nuevasVidas[index] = false;
         }
-        console.log("Vidas Jugador 1 actualizadas:", nuevasVidas);
+        if (!nuevasVidas.includes(true)) {
+          setJuegoTerminado(true);
+          setMensajeResultado("¡Jugador 2 gana!");
+        }
         return nuevasVidas;
       });
     }
   };
-
+  // Funcion para reiniciar el juego
   const reiniciarJuego = () => {
     setVidasJugador1([true, true, true]);
     setVidasJugador2([true, true, true]);
-    setResultado("");
+    setMensajeResultado("");
     setAtributoSeleccionado("");
+    setJuegoTerminado(false);
     seleccionarSlimesAleatorios();
   };
-
+  // Funcion para seleccionar los slimes aleatorios
   const seleccionarSlimesAleatorios = () => {
+    // Seleccionar dos slimes aleatorios
     const randomSlime1 = Math.floor(Math.random() * slimes.length);
+    // Seleccionar otro slime aleatorio diferente al anterior
     let randomSlime2;
     do {
       randomSlime2 = Math.floor(Math.random() * slimes.length);
     } while (randomSlime1 === randomSlime2);
-
+    // Actualizar los slimes de los jugadores
     setSlimeJugador1State(slimes[randomSlime1]);
     setSlimeJugador2State(slimes[randomSlime2]);
   };
 
-
   return (
     <div className="bottom">
-      <IonButton expand="block" color="primary" onClick={pelea}>
-        Luchar
-      </IonButton>
-      <IonButton expand="block" color="secondary" onClick={reiniciarJuego}>
-        Reiniciar
-      </IonButton>
-      <IonButton expand="block" color="danger" onClick={() => history.push("/")}>
-        Salir 
-      </IonButton>
+      <button onClick={pelea}>Luchar</button>
+      <button onClick={reiniciarJuego}>Reiniciar</button>
+      <button onClick={() => navigate("/")}>Salir</button>
     </div>
   );
-
 };
-
 
 export const BodyComponent = ({ slimeJugador1, slimeJugador2 }) => {
   return (
-    <IonGrid className="body">
-      <IonRow className="SlimesEscogidos" justify-content-center>
-        <IonCol size="6" className="slime-col">
-          <IonImg src={slimeJugador1.image} alt="Slime Jugador 1" />
-        </IonCol>
-        <IonCol size="6" className="slime-col">
-          <IonImg src={slimeJugador2.image} alt="Slime Jugador 2" />
-        </IonCol>
-      </IonRow>
-
-      <IonRow className="AtributosPlayers">
-        <IonCol>
-          <IonList>
-            <IonItem>
-              Jugador 1: Ataque: {slimeJugador1.ATAQUE}, Defensa: {slimeJugador1.DEFENSA}, Velocidad: {slimeJugador1.VELOCIDAD}
-            </IonItem>
-            <IonItem>
-              Jugador 2: Ataque: {slimeJugador2.ATAQUE}, Defensa: {slimeJugador2.DEFENSA}, Velocidad: {slimeJugador2.VELOCIDAD}
-            </IonItem>
-          </IonList>
-        </IonCol>
-      </IonRow>
-    </IonGrid>
+    <div className="body">
+      <div className="SlimesEscogidos">
+        <img src={slimeJugador1.image} alt="Slime Jugador 1" />
+        <img src={slimeJugador2.image} alt="Slime Jugador 2" />
+      </div>
+      <ul className="AtributosPlayers">
+        <li>Ataque: {slimeJugador1.Ataque}, Defensa: {slimeJugador1.Defensa}, Velocidad: {slimeJugador1.Velocidad}</li>
+        <li>Ataque: {slimeJugador2.Ataque}, Defensa: {slimeJugador2.Defensa}, Velocidad: {slimeJugador2.Velocidad}</li>
+      </ul>
+    </div>
   );
 };

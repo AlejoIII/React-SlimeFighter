@@ -1,49 +1,29 @@
 import React from 'react';
-import { IonGrid, IonRow, IonCol, IonImg, IonText } from '@ionic/react';
-
+// Componente que se encarga de mostrar las vidas de los jugadores, el atributo seleccionado y el resultado de la pelea
 function TopComponent({ vidasJugador1, vidasJugador2, atributoSeleccionado, resultado }) {
   return (
-    <IonGrid className="top-component"> 
-      <IonRow>
-        <IonCol size="4" className="vidas1">
-          {vidasJugador1.map((vida, index) =>
-            vida ? (
-              <IonImg
-                key={index}
-                src="/images/Slime Rancher/Gemas/gema_dorada.png"
-                alt={`Vida ${index + 1}`}
-              />
-            ) : null
-          )}
-        </IonCol>
-
-        <IonCol size="4" className="atributo" text-center>
-          <IonText>
-            <h3>{atributoSeleccionado}</h3>
-          </IonText>
-        </IonCol>
-
-        <IonCol size="4" className="vidas2">
-          {vidasJugador2.map((vida, index) =>
-            vida ? (
-              <IonImg
-                key={index}
-                src="/images/Slime Rancher/Gemas/gema_dorada.png"
-                alt={`Vida ${index + 1}`}
-              />
-            ) : null
-          )}
-        </IonCol>
-      </IonRow>
-
-      <IonRow>
-        <IonCol className="resultado" text-center>
-          <IonText>
-            <h3>{resultado}</h3>
-          </IonText>
-        </IonCol>
-      </IonRow>
-    </IonGrid>
+    <div className="top-component">
+      <div>
+        <div className="vidas1">
+          {vidasJugador1.map((vida, index) => (
+            vida ? <img key={index} src={"/images/Slime Rancher/Gemas/gema_dorada.png"} alt={`Vida ${index + 1}`} /> : null
+          ))}
+        </div>
+      </div>
+      <div className='atributo'>
+      <h3>{atributoSeleccionado}</h3>
+      </div>
+      <div>
+        <div className="vidas2">
+          {vidasJugador2.map((vida, index) => (
+            vida ? <img key={index} src={"/images/Slime Rancher/Gemas/gema_dorada.png"} alt={`Vida ${index + 1}`} /> : null
+          ))}
+        </div>
+      </div>
+      <div className="resultado">       
+        <h3>{resultado}</h3>
+      </div>
+    </div>
   );
 }
 
